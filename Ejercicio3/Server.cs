@@ -18,6 +18,15 @@ namespace Ejercicio3
 
         static void funcionCliente(object cliente)
         {
+            Socket sClient = (Socket)cliente;
+            IPEndPoint ieCliente = (IPEndPoint)sClient.RemoteEndPoint;
+
+            using (NetworkStream ns = new NetworkStream(sClient))
+            using (StreamReader sr = new StreamReader(ns))
+            using (StreamWriter sw = new StreamWriter(ns))
+            {
+
+            }
 
         }
 
