@@ -14,20 +14,24 @@ namespace Ejercicio3
 {
     class Server
     {
-        List<int> numeros = new List<int>(); // Creo una colección que guarde los números que le han tocado a los clientes
+        static readonly object l = new object(); // Creo el objeto del lock, porque los hilos están usando recursos iguales
 
-        static void funcionCliente(object cliente)
+        static List<Cliente> clientes = new List<Cliente>(); // Creo una colección de clientes para ir guardando en ella los clientes que se conectan
+        static List<int> numeros = new List<int>(); // Creo una colección que guarde los números que le han tocado a los clientes
+
+        static void funcionCliente(object cl)
         {
-            Socket sClient = (Socket)cliente;
-            IPEndPoint ieCliente = (IPEndPoint)sClient.RemoteEndPoint;
+            Cliente cliente = (Cliente)cl;
 
-            using (NetworkStream ns = new NetworkStream(sClient))
+            Random generador = new Random();
+            numeros.Add(generador.Next(1,21));
+
+            using (NetworkStream ns = new NetworkStream(cliente.SClient))
             using (StreamReader sr = new StreamReader(ns))
             using (StreamWriter sw = new StreamWriter(ns))
             {
 
             }
-
         }
 
 
@@ -58,13 +62,17 @@ namespace Ejercicio3
                 }
             }
 
-            s.Listen(6); // Se queda esperando una conexión y se establece la cola a 30
+            s.Listen(6); // Se queda esperando una conexión y se establece la cola a 6 como máximo
 
             while (true)
             {
                 Socket sClient = s.Accept(); // Aceptamos la conexión del cliente
+                // Después de aceptar la conexión, añadimos a la colección un nuevo cliente pasándole su Socket como parámetro para así inicializarlo
+                clientes.Add(new Cliente(sClient));
+
+                // Uso la funcionCliente para el hiloCliente y lo lanzo pasándole el último cliente añadido a la colección como parámetro
                 Thread hiloCliente = new Thread(funcionCliente);
-                hiloCliente.Start(sClient);
+                hiloCliente.Start(clientes[clientes.Count - 1]);
             }
         }
     }
