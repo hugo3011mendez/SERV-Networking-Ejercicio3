@@ -57,6 +57,21 @@ namespace Ejercicio3
         }
 
 
+        private int numero;
+        public int Numero
+        {
+            set
+            {
+                numero = value;
+            }
+
+            get
+            {
+                return numero;
+            }
+        }
+
+
         public Cliente(Socket s) // Constructor, donde paso como parámetro el socket y le doy valores junto al IPEndPoint
         {
             SClient = s;

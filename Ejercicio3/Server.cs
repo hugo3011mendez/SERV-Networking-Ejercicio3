@@ -17,20 +17,69 @@ namespace Ejercicio3
         static readonly object l = new object(); // Creo el objeto del lock, porque los hilos están usando recursos iguales
 
         static List<Cliente> clientes = new List<Cliente>(); // Creo una colección de clientes para ir guardando en ella los clientes que se conectan
-        static List<int> numeros = new List<int>(); // Creo una colección que guarde los números que le han tocado a los clientes
+
 
         static void funcionCliente(object cl)
         {
             Cliente cliente = (Cliente)cl;
 
             Random generador = new Random();
-            numeros.Add(generador.Next(1,21));
+            cliente.Numero = generador.Next(1, 21);
+
+            bool salir = false; // Creo variable para indicar si el cliente debe salir o no del juego
 
             using (NetworkStream ns = new NetworkStream(cliente.SClient))
             using (StreamReader sr = new StreamReader(ns))
             using (StreamWriter sw = new StreamWriter(ns))
             {
+                while (!salir)
+                {
+                    if (clientes.Count >= 2)
+                    {
+                        int cont = 0;
 
+                        lock (l)
+                        {
+                            foreach(Cliente cli in clientes)
+                            {
+                                if (cli.Listo)
+                                {
+                                    cont++;
+                                }
+                            }
+
+                        }
+
+                        if (cont == clientes.Count)
+                        {
+                            // Empieza la cuenta atrás
+
+                            int numGanador = 0;
+
+                            lock (l)
+                            {
+                                for (int i = 0; i < clientes.Count; i++)
+                                {
+                                    if (clientes[i].Numero >= numGanador)
+                                    {
+                                        numGanador = clientes[i].Numero;
+                                    }
+                                }
+                            }
+
+                            if (numGanador == cliente.Numero)
+                            {
+                                sw.WriteLine("ERES EL GANADOR!!!");
+                            }
+                            else
+                            {
+                                sw.WriteLine("No has ganado...\n");
+                                sw.WriteLine("Tu número : " + cliente.Numero);
+                                sw.WriteLine("Número ganador : " + numGanador);
+                            }
+                        }
+                    }
+                }
             }
         }
 
