@@ -246,12 +246,18 @@ namespace Ejercicio3
             while (true)
             {
                 Socket sClient = s.Accept(); // Aceptamos la conexión del cliente
-                // Después de aceptar la conexión, añadimos a la colección un nuevo cliente pasándole su Socket como parámetro para así inicializarlo
-                clientes.Add(new Cliente(sClient));
+                lock (l)
+                {
+                    // Después de aceptar la conexión, añadimos a la colección un nuevo cliente pasándole su Socket como parámetro para así inicializarlo
+                    clientes.Add(new Cliente(sClient));
 
-                // Uso la funcionCliente para el hiloCliente y lo lanzo pasándole el último cliente añadido a la colección como parámetro
-                Thread hiloCliente = new Thread(cuentaAtras);
-                hiloCliente.Start(clientes[clientes.Count - 1]);
+                    if (clientes.Count >= 2) // Si hay 2 o más clientes conectados, empieza la cuenta atrás
+                    {
+                        // Uso la funcionCliente para el hiloCliente y lo lanzo pasándole el último cliente añadido a la colección como parámetro
+                        Thread hiloCliente = new Thread(cuentaAtras);
+                        hiloCliente.Start();
+                    }
+                }
             }
         }
     }
