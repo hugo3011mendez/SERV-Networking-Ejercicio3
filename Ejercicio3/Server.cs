@@ -21,7 +21,7 @@ namespace Ejercicio3
         static Random generador = new Random(); // Generador de números aleatorios
 
         private static DateTime tiempo; // Tiempo transcurrido
-        const int TIEMPOJUEGO = 15; // Constante que indica la duración de la cuenta atrás
+        const int TIEMPOJUEGO = 20; // Constante que indica la duración de la cuenta atrás
         private static int seg = TIEMPOJUEGO;
         private static bool final = false;
 
@@ -79,11 +79,8 @@ namespace Ejercicio3
                         }
 
 
-                        if (diferencia.Seconds == 0) // Si no existe diferencia de tiempo entre el tiempo transcurrido y el momento actual...
+                        if (diferencia.Seconds == -1) // Si no existe diferencia de tiempo entre el tiempo transcurrido y el momento actual...
                         {
-                            string tiempoRestante = string.Format($"{diferencia:ss}"); // Formateo el tiempo restante en una cadena
-                            mensajeATodos(tiempoRestante); // Y se la muestro a todos los clientes
-
                             mensajeATodos("SE ACABO EL TIEMPO!!"); // Mando el mensaje a todos los clientes de que se ha acabado el tiempo
                             comprobarGanador(); // Compruebo el ganador
                             finalJuego(); // Y acabo la partida
