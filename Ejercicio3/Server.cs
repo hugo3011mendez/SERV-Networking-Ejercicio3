@@ -48,7 +48,6 @@ namespace Ejercicio3
                     if (numAsignado) // Si se ha asignado correctamente el número...
                     {
                        cl.Numero = num; // Establezco el número asignado en su propiedad correspondiente en el cliente
-                       //mensajeAUno(c, "Tu numero es " + c.Numero);
                     }
                 }
             }
@@ -68,21 +67,21 @@ namespace Ejercicio3
                     if (!final) // Si la cuenta atrás aún no ha finalizado...
                     {
                         DateTime now = DateTime.Now; // Declaro y establezco el valor de una variable como el momento actual
-                        TimeSpan dif = tiempo - now; // Declaro y establezco el valor de una variable como la diferencia de tiempo entre el tiempo transcurrido y el momento actual
+                        TimeSpan diferencia = tiempo - now; // Declaro y establezco el valor de una variable como la diferencia de tiempo entre el tiempo transcurrido y el momento actual
 
                         // Si la diferencia de tiempo entre el tiempo transcurrido y el momento actual se puede dividir en segundos y es igual al tiempo restante para que acabe la cuenta atrás
-                        if (dif.Milliseconds % 1000 == 0 && dif.Seconds == seg) 
+                        if (diferencia.Milliseconds % 1000 == 0 && diferencia.Seconds == seg) 
                         {
-                            string tiempoRestante = string.Format($"{dif:mm\\:ss}"); // Formateo el tiempo restante en una cadena
+                            string tiempoRestante = string.Format($"{diferencia:ss}"); // Formateo el tiempo restante en una cadena
                             mensajeATodos(tiempoRestante); // Y se la muestro a todos los clientes
 
                             seg --; // Reduzco los segundos restantes para acabar la cuenta atrás
                         }
 
 
-                        if (dif.Seconds == 0) // Si no existe diferencia de tiempo entre el tiempo transcurrido y el momento actual...
+                        if (diferencia.Seconds == 0) // Si no existe diferencia de tiempo entre el tiempo transcurrido y el momento actual...
                         {
-                            string tiempoRestante = string.Format($"{dif:mm\\:ss}"); // Formateo el tiempo restante en una cadena
+                            string tiempoRestante = string.Format($"{diferencia:ss}"); // Formateo el tiempo restante en una cadena
                             mensajeATodos(tiempoRestante); // Y se la muestro a todos los clientes
 
                             mensajeATodos("SE ACABO EL TIEMPO!!"); // Mando el mensaje a todos los clientes de que se ha acabado el tiempo
